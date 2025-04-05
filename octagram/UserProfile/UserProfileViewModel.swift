@@ -14,7 +14,11 @@ class UserProfileViewModel: ObservableObject {
     @Published var user: User?
     @Published var isLoading = false
     @Published var errorMessage: String?
-    private let apiClient = APIClient.shared
+    private let apiClient: APIService
+
+    init(apiClient: APIService) {
+        self.apiClient = apiClient
+    }
 
     // MARK: - methods
 

@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchView: View {
     // MARK: - variables
 
-    @StateObject private var searchVM = SearchViewModel()
+    @StateObject private var searchVM = SearchViewModel(apiClient: APIClient())
     @State private var showingError = false
 
     // MARK: - body

@@ -19,7 +19,12 @@ class UsersListViewModel: ObservableObject {
     @Published var users: [UserSummary] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-    private let apiClient = APIClient.shared
+
+    private let apiClient: APIService
+
+    init(apiClient: APIService) {
+        self.apiClient = apiClient
+    }
 
     // MARK: - methods
 

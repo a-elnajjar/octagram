@@ -11,7 +11,7 @@ struct UserProfileView: View {
     // MARK: - variables
 
     let username: String
-    @StateObject private var userProfileVM = UserProfileViewModel()
+    @StateObject private var userProfileVM = UserProfileViewModel(apiClient: APIClient())
 
     // MARK: - body
 

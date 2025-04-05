@@ -12,7 +12,7 @@ struct UsersListView: View {
 
     @State private var selectedTab = "Following"
     var tabs = ["Following", "Followers"]
-    @StateObject private var usersListVM = UsersListViewModel()
+    @StateObject private var usersListVM = UsersListViewModel(apiClient: APIClient())
     let username: String
 
     // MARK: - body

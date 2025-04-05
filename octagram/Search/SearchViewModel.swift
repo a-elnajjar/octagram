@@ -15,7 +15,12 @@ class SearchViewModel: ObservableObject {
     @Published private(set) var results: [UserSummary] = []
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
-    private let apiClient = APIClient.shared
+
+    private let apiClient: APIService
+
+    init(apiClient: APIService) {
+        self.apiClient = apiClient
+    }
 
     // Search for users
     func searchUsers() {

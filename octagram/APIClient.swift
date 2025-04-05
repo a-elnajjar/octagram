@@ -23,19 +23,28 @@ enum GitHubAPIPath: String {
     case following = "/following"
 }
 
-// singleton APIClient class
-final class APIClient {
+protocol APIService {
+    func fetch<T: Decodable>(path: String, as type: T.Type) async throws -> T
+}
+
+//APIClient class
+final class APIClient: APIService {
     // MARK: - variables
 
-    static let shared = APIClient()
     private let session: URLSession
     private let baseURL: String
 
     // MARK: - init
 
-    private init(session: URLSession = .shared) {
+    init(session: URLSession = .shared) {
         self.session = session
-        baseURL = Bundle.main.object(forInfoDictionaryKey: "GitHubAPIBaseURL") as? String ?? ""
+        guard let baseURL = Bundle.main.object(forInfoDictionaryKey: "GitHubAPIBaseURL") as? String,
+              !baseURL.isEmpty
+        else {
+            fatalError("GitHubAPIBaseURL not found or empty in Info.plist")
+        }
+
+        self.baseURL = baseURL
     }
 
     // MARK: - methods
