@@ -7,7 +7,7 @@
 
 import Foundation
 
-// SearchResult will hodle the search result data from searchUsers endpoint
+// SearchResult will holds the search result data from searchUsers endpoint
 struct SearchResult: Codable {
     let items: [UserSummary]
 }
