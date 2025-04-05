@@ -1,5 +1,5 @@
 //
-//  UserSummary.swift
+//  User.swift
 //  octagram
 //
 //  Created by Abdalla Elnajjar on 2025-04-05.
@@ -7,19 +7,22 @@
 
 import Foundation
 
-// SearchResult will hodle the search result data from searchUsers endpoint
-struct SearchResult: Codable {
-    let items: [UserSummary]
-}
-
-struct UserSummary: Codable, Identifiable {
+struct User: Codable, Identifiable {
     let id: Int
     let login: String
-    let avatarURL: String?
+    let name: String?
+    let avatarURL: String
+    let bio: String?
+    let followers: Int
+    let following: Int
 
     enum CodingKeys: String, CodingKey {
         case id
         case login
+        case name
         case avatarURL = "avatar_url"
+        case bio
+        case followers
+        case following
     }
 }

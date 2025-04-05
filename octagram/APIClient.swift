@@ -7,51 +7,49 @@
 
 import Foundation
 
-
 // network Errors
-enum NetworkError:Error {
-	case invalidURL
-	case invalidStatusCode(Int)
-	case networkError(Error)
-	case decodingError(Error)
+enum NetworkError: Error {
+    case invalidURL
+    case invalidStatusCode(Int)
+    case networkError(Error)
+    case decodingError(Error)
 }
 
-
-//GitHub API Paths
+// GitHub API Paths
 enum GitHubAPIPath: String {
-	case searchUsers = "/search/users?q="
+    case searchUsers = "/search/users?q="
+    case user = "/users/"
 }
 
+// singleton APIClient class
+final class APIClient {
+    static let shared = APIClient()
+    private let session: URLSession
+    private let baseURL: String
 
+    private init(session: URLSession = .shared) {
+        self.session = session
+        baseURL = Bundle.main.object(forInfoDictionaryKey: "GitHubAPIBaseURL") as? String ?? ""
+    }
 
-// singleton APIClient class 
-final class APIClient{
-	static let shared =  APIClient()
-	private let session : URLSession
-	private let baseURL : String
-	
-	private init(session: URLSession = .shared) {
-		self.session = session
-		self.baseURL = Bundle.main.object(forInfoDictionaryKey: "GitHubAPIBaseURL") as? String ?? ""
-	}
-	
-	func fetch<T:Decodable>(path: String , as type: T.Type) async throws -> T {
-		guard let url = URL(string: self.baseURL + path) else {
-			throw NetworkError.invalidURL
-		}
-		
-		do {
-			let (data, response) = try await session.data(from: url)
-			guard let httpResponse = response as? HTTPURLResponse,
-				  (200...299).contains(httpResponse.statusCode) else {
-				throw NetworkError.invalidStatusCode((response as? HTTPURLResponse)?.statusCode ?? -1)
-			}
-			return try JSONDecoder().decode(T.self, from: data)
-			
-		} catch let decodingError as DecodingError {
-			throw NetworkError.decodingError(decodingError)
-		} catch {
-			throw NetworkError.networkError(error)
-		}
-	}
+    func fetch<T: Decodable>(path: String, as _: T.Type) async throws -> T {
+        guard let url = URL(string: baseURL + path) else {
+            throw NetworkError.invalidURL
+        }
+
+        do {
+            let (data, response) = try await session.data(from: url)
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200 ... 299).contains(httpResponse.statusCode)
+            else {
+                throw NetworkError.invalidStatusCode((response as? HTTPURLResponse)?.statusCode ?? -1)
+            }
+            return try JSONDecoder().decode(T.self, from: data)
+
+        } catch let decodingError as DecodingError {
+            throw NetworkError.decodingError(decodingError)
+        } catch {
+            throw NetworkError.networkError(error)
+        }
+    }
 }

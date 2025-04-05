@@ -1,0 +1,14 @@
+disabled_rules: 
+  - line_length
+  - trailing_whitespace
+  - force_cast
+opt_in_rules:
+  - closure_spacing
+  - empty_count
+  - explicit_init
+included:
+  - .
+excluded:
+  - Carthage
+  - Pods
+
