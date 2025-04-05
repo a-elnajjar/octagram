@@ -28,13 +28,13 @@ struct UserProfileView: View {
                 Text(user.name ?? user.login)
                     .font(.title)
                 // user bio
-                Text(user.bio ?? "")
+                Text(user.description ?? "")
                     .font(.caption)
                     .multilineTextAlignment(.center)
-
+                // following and followers section
                 HStack(spacing: 8) {
                     // followers
-                    NavigationLink(destination: EmptyView()) {
+                    NavigationLink(destination: UsersListView(username: user.login)) {
                         Text("\(user.followers) followers")
                             .foregroundColor(.blue)
                     }
@@ -43,7 +43,7 @@ struct UserProfileView: View {
                         .foregroundColor(.gray)
 
                     // following
-                    NavigationLink(destination: EmptyView()) {
+                    NavigationLink(destination: UsersListView(username: user.login)) {
                         Text("\(user.following) following")
                             .foregroundColor(.blue)
                     }

@@ -19,6 +19,8 @@ enum NetworkError: Error {
 enum GitHubAPIPath: String {
     case searchUsers = "/search/users?q="
     case user = "/users/"
+    case followers = "/followers"
+    case following = "/following"
 }
 
 // singleton APIClient class

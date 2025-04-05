@@ -12,7 +12,7 @@ struct User: Codable, Identifiable {
     let login: String
     let name: String?
     let avatarURL: String
-    let bio: String?
+    let description: String?
     let followers: Int
     let following: Int
 
@@ -21,7 +21,7 @@ struct User: Codable, Identifiable {
         case login
         case name
         case avatarURL = "avatar_url"
-        case bio
+        case description = "bio"
         case followers
         case following
     }
