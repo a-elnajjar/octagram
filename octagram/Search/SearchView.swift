@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct SearchView: View {
+    // MARK: - variables
+
     @StateObject private var searchVM = SearchViewModel()
     @State private var showingError = false
+
+    // MARK: - body
 
     var body: some View {
         NavigationStack {
@@ -51,6 +55,9 @@ struct SearchView: View {
                     }
                 }
             }
+
+            // MARK: - navigation Modifier
+
             .navigationTitle("Search GitHub Profiles")
             .searchable(text: $searchVM.query, prompt: "Search for GitHub Profile")
             .onChange(of: searchVM.query) {
@@ -65,6 +72,9 @@ struct SearchView: View {
                         .padding()
                 }
             }
+
+            // MARK: - UIAlert
+
             // show UIAlert when we have error
             .alert("Error", isPresented: .constant(searchVM.errorMessage != nil), presenting: searchVM.errorMessage) { _ in
                 Button("OK", role: .cancel) {

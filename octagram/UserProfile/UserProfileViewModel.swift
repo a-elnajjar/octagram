@@ -9,11 +9,14 @@ import Foundation
 
 @MainActor
 class UserProfileViewModel: ObservableObject {
+    // MARK: - variables
+
     @Published var user: User?
     @Published var isLoading = false
     @Published var errorMessage: String?
-
     private let apiClient = APIClient.shared
+
+    // MARK: - methods
 
     func fetchUserProfile(_ username: String) async {
         isLoading = true

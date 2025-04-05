@@ -14,11 +14,14 @@ enum UserListingType {
 
 @MainActor
 class UsersListViewModel: ObservableObject {
+    // MARK: - variables
+
     @Published var users: [UserSummary] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-
     private let apiClient = APIClient.shared
+
+    // MARK: - methods
 
     func fetchUsers(username: String, typeOflesting: UserListingType) async {
         isLoading = true

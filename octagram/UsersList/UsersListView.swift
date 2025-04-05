@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct UsersListView: View {
+    // MARK: - variables
+
     @State private var selectedTab = "Following"
     var tabs = ["Following", "Followers"]
-
     @StateObject private var usersListVM = UsersListViewModel()
-
     let username: String
+
+    // MARK: - body
 
     var body: some View {
         VStack {

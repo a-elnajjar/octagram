@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct UserProfileView: View {
+    // MARK: - variables
+
     let username: String
     @StateObject private var userProfileVM = UserProfileViewModel()
+
+    // MARK: - body
 
     var body: some View {
         VStack {

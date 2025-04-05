@@ -9,11 +9,12 @@ import Foundation
 
 @MainActor
 class SearchViewModel: ObservableObject {
+    // MARK: - variables
+
     @Published var query: String = ""
     @Published private(set) var results: [UserSummary] = []
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
-
     private let apiClient = APIClient.shared
 
     // Search for users
@@ -28,6 +29,8 @@ class SearchViewModel: ObservableObject {
             await performSearch()
         }
     }
+
+    // MARK: - methods
 
     // search logic
     private func performSearch() async {

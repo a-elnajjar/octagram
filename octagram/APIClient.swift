@@ -25,14 +25,20 @@ enum GitHubAPIPath: String {
 
 // singleton APIClient class
 final class APIClient {
+    // MARK: - variables
+
     static let shared = APIClient()
     private let session: URLSession
     private let baseURL: String
+
+    // MARK: - init
 
     private init(session: URLSession = .shared) {
         self.session = session
         baseURL = Bundle.main.object(forInfoDictionaryKey: "GitHubAPIBaseURL") as? String ?? ""
     }
+
+    // MARK: - methods
 
     func fetch<T: Decodable>(path: String, as _: T.Type) async throws -> T {
         guard let url = URL(string: baseURL + path) else {
