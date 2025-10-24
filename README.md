@@ -35,10 +35,6 @@ This project does not include automated tests. Add unit tests under the `octagra
 ## Linting & Style
 No linting tools are configured. Consider integrating **SwiftLint** or **SwiftFormat** for consistent style.
 
-## Known Limitations & Follow-Up Work
-- No request throttling or cancellation when typing in the search bar, which can generate excessive API calls.
-- Followers/following navigation always defaults to the "Following" tab and does not deep-link to the tapped segment.
-- Alert presentation in `SearchView` uses an immutable binding and will not dismiss correctly once shown.
 - Networking base URL relies on a fatal error if the Info.plist key is missing instead of failing gracefully.
 - API responses are decoded with a default `JSONDecoder` and do not customize date/strategy handling if GitHub responses change.
 
