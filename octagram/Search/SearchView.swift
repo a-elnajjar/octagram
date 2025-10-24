@@ -10,8 +10,13 @@ import SwiftUI
 struct SearchView: View {
     // MARK: - variables
 
-    @StateObject private var searchVM = SearchViewModel(apiClient: APIClient())
-    @State private var showingError = false
+    @StateObject private var searchVM: SearchViewModel
+    private let apiClient: APIService
+
+    init(apiClient: APIService) {
+        self.apiClient = apiClient
+        _searchVM = StateObject(wrappedValue: SearchViewModel(apiClient: apiClient))
+    }
 
     // MARK: - body
 
@@ -21,7 +26,7 @@ struct SearchView: View {
                 // I use LazyVStack to render Item when need it
                 LazyVStack(alignment: .leading, spacing: 12) {
                     ForEach(searchVM.results) { user in
-                        NavigationLink(destination: UserProfileView(username: user.login)) {
+                        NavigationLink(destination: UserProfileView(username: user.login, apiClient: apiClient)) {
                             HStack {
                                 if let avatarURL = user.avatarURL, let url = URL(string: avatarURL) {
                                     AsyncImage(url: url) { image in
@@ -60,7 +65,7 @@ struct SearchView: View {
 
             .navigationTitle("Search GitHub Profiles")
             .searchable(text: $searchVM.query, prompt: "Search for GitHub Profile")
-            .onChange(of: searchVM.query) {
+            .onChange(of: searchVM.query) { _ in
                 searchVM.searchUsers()
             }
             .overlay {
@@ -76,7 +81,18 @@ struct SearchView: View {
             // MARK: - UIAlert
 
             // show UIAlert when we have error
-            .alert("Error", isPresented: .constant(searchVM.errorMessage != nil), presenting: searchVM.errorMessage) { _ in
+            .alert(
+                "Error",
+                isPresented: Binding(
+                    get: { searchVM.errorMessage != nil },
+                    set: { newValue in
+                        if !newValue {
+                            searchVM.errorMessage = nil
+                        }
+                    }
+                ),
+                presenting: searchVM.errorMessage
+            ) { _ in
                 Button("OK", role: .cancel) {
                     searchVM.errorMessage = nil
                 }
@@ -88,5 +104,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView()
+    SearchView(apiClient: APIClient.previewClient())
 }

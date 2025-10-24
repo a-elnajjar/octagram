@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    private let apiClient: APIService
+
+    init(apiClient: APIService) {
+        self.apiClient = apiClient
+    }
+
     var body: some View {
-        SearchView()
+        SearchView(apiClient: apiClient)
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(apiClient: APIClient.previewClient())
 }

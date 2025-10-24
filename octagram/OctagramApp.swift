@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct OctagramApp: App {
+    private let apiClient = APIClient.makeDefault()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(apiClient: apiClient)
         }
     }
 }
