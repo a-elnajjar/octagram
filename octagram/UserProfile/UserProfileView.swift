@@ -11,7 +11,14 @@ struct UserProfileView: View {
     // MARK: - variables
 
     let username: String
-    @StateObject private var userProfileVM = UserProfileViewModel(apiClient: APIClient())
+    private let apiClient: APIService
+    @StateObject private var userProfileVM: UserProfileViewModel
+
+    init(username: String, apiClient: APIService) {
+        self.username = username
+        self.apiClient = apiClient
+        _userProfileVM = StateObject(wrappedValue: UserProfileViewModel(apiClient: apiClient))
+    }
 
     // MARK: - body
 
@@ -38,7 +45,7 @@ struct UserProfileView: View {
                 // following and followers section
                 HStack(spacing: 8) {
                     // followers
-                    NavigationLink(destination: UsersListView(username: user.login)) {
+                    NavigationLink(destination: UsersListView(username: user.login, initialTab: .followers, apiClient: apiClient)) {
                         Text("\(user.followers) followers")
                             .foregroundColor(.blue)
                     }
@@ -47,7 +54,7 @@ struct UserProfileView: View {
                         .foregroundColor(.gray)
 
                     // following
-                    NavigationLink(destination: UsersListView(username: user.login)) {
+                    NavigationLink(destination: UsersListView(username: user.login, initialTab: .following, apiClient: apiClient)) {
                         Text("\(user.following) following")
                             .foregroundColor(.blue)
                     }
@@ -68,5 +75,5 @@ struct UserProfileView: View {
 }
 
 #Preview {
-    UserProfileView(username: "a-elnajjar")
+    UserProfileView(username: "a-elnajjar", apiClient: APIClient.previewClient())
 }

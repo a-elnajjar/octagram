@@ -7,9 +7,13 @@
 
 import Foundation
 
-enum UserListingType {
-    case followers
-    case following
+enum UserListingType: String, CaseIterable, Identifiable {
+    case followers = "Followers"
+    case following = "Following"
+
+    var id: Self { self }
+
+    var title: String { rawValue }
 }
 
 @MainActor
@@ -28,12 +32,14 @@ class UsersListViewModel: ObservableObject {
 
     // MARK: - methods
 
-    func fetchUsers(username: String, typeOflesting: UserListingType) async {
+    func fetchUsers(username: String, type: UserListingType) async {
         isLoading = true
         errorMessage = nil
+        defer { isLoading = false }
+
         let path: String
 
-        switch typeOflesting {
+        switch type {
         case .followers:
             path = GitHubAPIPath.user.rawValue + username + GitHubAPIPath.followers.rawValue
         case .following:
@@ -44,10 +50,12 @@ class UsersListViewModel: ObservableObject {
             let users = try await apiClient.fetch(path: path, as: [UserSummary].self)
             self.users = users
         } catch {
-            errorMessage = "Failed to load data"
-            users = []
+            self.users = []
+            if let networkError = error as? NetworkError {
+                errorMessage = networkError.errorDescription
+            } else {
+                errorMessage = error.localizedDescription
+            }
         }
-
-        isLoading = false
     }
 }

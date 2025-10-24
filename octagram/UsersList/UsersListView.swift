@@ -10,10 +10,17 @@ import SwiftUI
 struct UsersListView: View {
     // MARK: - variables
 
-    @State private var selectedTab = "Following"
-    var tabs = ["Following", "Followers"]
-    @StateObject private var usersListVM = UsersListViewModel(apiClient: APIClient())
+    @State private var selectedTab: UserListingType
+    @StateObject private var usersListVM: UsersListViewModel
+    private let apiClient: APIService
     let username: String
+
+    init(username: String, initialTab: UserListingType = .following, apiClient: APIService) {
+        self.username = username
+        self.apiClient = apiClient
+        _selectedTab = State(initialValue: initialTab)
+        _usersListVM = StateObject(wrappedValue: UsersListViewModel(apiClient: apiClient))
+    }
 
     // MARK: - body
 
@@ -21,8 +28,9 @@ struct UsersListView: View {
         VStack {
             // pikker ui
             Picker("Select ", selection: $selectedTab) {
-                ForEach(tabs, id: \.self) {
-                    Text($0)
+                ForEach(UserListingType.allCases) {
+                    Text($0.title)
+                        .tag($0)
                 }
             }
             .pickerStyle(.segmented)
@@ -37,7 +45,7 @@ struct UsersListView: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 12) {
                         ForEach(usersListVM.users) { user in
-                            NavigationLink(destination: UserProfileView(username: user.login)) {
+                            NavigationLink(destination: UserProfileView(username: user.login, apiClient: apiClient)) {
                                 HStack {
                                     if let avatarURL = user.avatarURL, let url = URL(string: avatarURL) {
                                         AsyncImage(url: url) { image in
@@ -71,12 +79,11 @@ struct UsersListView: View {
         .navigationTitle(username)
         .navigationBarTitleDisplayMode(.inline)
         .task(id: selectedTab) {
-            let type: UserListingType = (selectedTab == "Followers") ? .followers : .following
-            await usersListVM.fetchUsers(username: username, typeOflesting: type)
+            await usersListVM.fetchUsers(username: username, type: selectedTab)
         }
     }
 }
 
 #Preview {
-    UsersListView(username: "a-elnajjar")
+    UsersListView(username: "a-elnajjar", apiClient: APIClient.previewClient())
 }

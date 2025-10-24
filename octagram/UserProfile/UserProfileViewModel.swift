@@ -31,7 +31,12 @@ class UserProfileViewModel: ObservableObject {
             let result = try await apiClient.fetch(path: path, as: User.self)
             user = result
         } catch {
-            errorMessage = "Failed to load user profile."
+            user = nil
+            if let networkError = error as? NetworkError {
+                errorMessage = networkError.errorDescription
+            } else {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 }
