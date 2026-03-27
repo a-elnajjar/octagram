@@ -26,16 +26,4 @@ Octagram is a SwiftUI GitHub client that lets you search for users and inspect t
 - `UsersList/` – Followers/following list UI and data fetching.
 - `Models/` – API response models.
 - `APIClient.swift` – Shared networking layer backed by `URLSession`.
-
-## Running Tests
-This project does not include automated tests. Add unit tests under the `octagramTests` target (not yet created) to cover:
-- Network layer decoding and error handling.
-- View model behavior for loading, success, and failure states.
-
-## Linting & Style
-No linting tools are configured. Consider integrating **SwiftLint** or **SwiftFormat** for consistent style.
-
-- Networking base URL relies on a fatal error if the Info.plist key is missing instead of failing gracefully.
-- API responses are decoded with a default `JSONDecoder` and do not customize date/strategy handling if GitHub responses change.
-
-Contributions should address the limitations above and include unit/UI tests where applicable.
+he limitations above and include unit/UI tests where applicable.
